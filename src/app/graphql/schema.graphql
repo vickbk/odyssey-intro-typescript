@@ -6,3 +6,8 @@ type Listing {
   costPerNight: Float
   closedForBookings: Boolean
 }
+
+type Query {
+  "A curated array of listings to feature on the homepage"
+  featuredListings: [Listing!]!
+}
