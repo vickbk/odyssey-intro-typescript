@@ -16,7 +16,7 @@
   "scripts": {
     "compile": "tsc",
     "dev": "ts-node-dev --respawn ./src/index.ts",
-    "start": "npm run compile && nodemon ./dist/index.js",
+    "start": "pnpm run compile && nodemon ./dist/index.js",
     "test": "jest"
   },
   "dependencies": {
