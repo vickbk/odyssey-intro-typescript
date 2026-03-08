@@ -16,8 +16,9 @@
   "scripts": {
     "compile": "tsc",
     "dev": "ts-node-dev --respawn ./src/index.ts",
-    "start": "pnpm run compile && nodemon ./dist/index.js",
-    "test": "jest"
+    "start": "pnpm compile && nodemon ./dist/index.js",
+    "test": "jest",
+    "generate": "graphql-codegen"
   },
   "dependencies": {
     "@apollo/datasource-rest": "^6.4.1",
@@ -27,6 +28,10 @@
     "graphql-tag": "^2.12.6"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^6.1.3",
+    "@graphql-codegen/near-operation-file-preset": "^5.0.0",
+    "@graphql-codegen/typescript": "^5.0.9",
+    "@graphql-codegen/typescript-resolvers": "^5.1.7",
     "@types/jest": "^29.0.3",
     "@types/node": "^20.0.0",
     "concurrently": "^8.2.2",
