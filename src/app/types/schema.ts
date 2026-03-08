@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
+import { DataSourceContext } from './context';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -124,7 +125,7 @@ export type ResolversParentTypes = {
   String: Scalars['String']['output'];
 };
 
-export type ListingResolvers<ContextType = any, ParentType extends ResolversParentTypes['Listing'] = ResolversParentTypes['Listing']> = {
+export type ListingResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Listing'] = ResolversParentTypes['Listing']> = {
   closedForBookings?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   costPerNight?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -132,11 +133,11 @@ export type ListingResolvers<ContextType = any, ParentType extends ResolversPare
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };
 
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+export type QueryResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   featuredListings?: Resolver<Array<ResolversTypes['Listing']>, ParentType, ContextType>;
 };
 
-export type Resolvers<ContextType = any> = {
+export type Resolvers<ContextType = DataSourceContext> = {
   Listing?: ListingResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };

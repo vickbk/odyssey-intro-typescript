@@ -1,4 +1,6 @@
-export function resolverWrapper(resolver: Function) {
+import { Resolver } from "@/app/types";
+
+export function resolverWrapper<T>(resolver: Function): Resolver<T> {
   return async (
     parent: unknown,
     args: unknown,
