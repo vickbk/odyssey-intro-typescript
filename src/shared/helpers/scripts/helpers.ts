@@ -1,5 +1,8 @@
-// import { Amenity } from "./types"
-
-// export const validateFullAmenities = (amenityList: Amenity[]) => amenityList.some(hasOwnPropertyName);
-
-// const hasOwnPropertyName = (amenity: Amenity): boolean => "name" in amenity;
+export function resolverWrapper(resolver: Function) {
+  return async (
+    parent: unknown,
+    args: unknown,
+    contextValue: unknown,
+    info: unknown,
+  ) => await resolver({ parent, args, contextValue, info });
+}
