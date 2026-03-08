@@ -4,10 +4,10 @@ const config: CodegenConfig = {
   // documents: ["src/**/*.graphql", "src/**/*.gql"],
   generates: {
     "src/app/types/schema.ts": {
-      plugins: ["typescript"],
+      plugins: ["typescript", "typescript-resolvers"],
     },
     "src/": {
-      plugins: ["typescript-operations"],
+      plugins: ["typescript-resolvers"],
       preset: "near-operation-file",
       presetConfig: {
         // path: "../types/",

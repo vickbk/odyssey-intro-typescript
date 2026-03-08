@@ -1,11 +1,14 @@
-import { resolverWrapper } from "@/shared";
+import { Resolvers } from "../types/schema";
 
-export const resolvers = {
+export const resolvers: Resolvers = {
   Query: {
-    featuredListings: resolverWrapper(
-      async ({ contextValue: { dataSources } }: { contextValue: any }) => {
-        return dataSources.listingApi.getFeaturedListings();
-      },
-    ),
+    // featuredListings: resolverWrapper(
+    //   async ({ contextValue: { dataSources } }) => {
+    //     return dataSources.listingApi.getFeaturedListings();
+    //   },
+    // ),
+    featuredListings: async (_, __, { dataSources }) => {
+      return dataSources.listingApi.getFeaturedListings();
+    },
   },
 };
