@@ -24,6 +24,33 @@ export type Amenity = {
   name: Scalars['String']['output'];
 };
 
+export type CreateListingInput = {
+  /** The Listing's amenities */
+  amenities: Array<Scalars['ID']['input']>;
+  /** Indicates whether listing is closed for bookings (on hiatus) */
+  closedForBookings?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The cost per night */
+  costPerNight: Scalars['Float']['input'];
+  /** The listing's description */
+  description: Scalars['String']['input'];
+  /** The number of beds available */
+  numOfBeds: Scalars['Int']['input'];
+  /** The listing's title */
+  title: Scalars['String']['input'];
+};
+
+export type CreateListingResponse = {
+  __typename?: 'CreateListingResponse';
+  /** Similar to HTTP status code, represents the status of the mutation */
+  code: Scalars['Int']['output'];
+  /** The newly created listing */
+  listing?: Maybe<Listing>;
+  /** Human-readable message for the UI */
+  message: Scalars['String']['output'];
+  /** Indicates whether the mutation was successful */
+  success: Scalars['Boolean']['output'];
+};
+
 /** A particular intergalactic location available for booking */
 export type Listing = {
   __typename?: 'Listing';
@@ -36,6 +63,16 @@ export type Listing = {
   id: Scalars['ID']['output'];
   numOfBeds?: Maybe<Scalars['Int']['output']>;
   title: Scalars['String']['output'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createListing: CreateListingResponse;
+};
+
+
+export type MutationCreateListingArgs = {
+  input: CreateListingInput;
 };
 
 export type Query = {
@@ -126,10 +163,13 @@ export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = 
 export type ResolversTypes = {
   Amenity: ResolverTypeWrapper<Amenity>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  CreateListingInput: CreateListingInput;
+  CreateListingResponse: ResolverTypeWrapper<CreateListingResponse>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Listing: ResolverTypeWrapper<Listing>;
+  Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
 };
@@ -138,10 +178,13 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Amenity: Amenity;
   Boolean: Scalars['Boolean']['output'];
+  CreateListingInput: CreateListingInput;
+  CreateListingResponse: CreateListingResponse;
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   Listing: Listing;
+  Mutation: Record<PropertyKey, never>;
   Query: Record<PropertyKey, never>;
   String: Scalars['String']['output'];
 };
@@ -150,6 +193,13 @@ export type AmenityResolvers<ContextType = DataSourceContext, ParentType extends
   category?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+};
+
+export type CreateListingResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['CreateListingResponse'] = ResolversParentTypes['CreateListingResponse']> = {
+  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  listing?: Resolver<Maybe<ResolversTypes['Listing']>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };
 
 export type ListingResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Listing'] = ResolversParentTypes['Listing']> = {
@@ -162,6 +212,10 @@ export type ListingResolvers<ContextType = DataSourceContext, ParentType extends
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };
 
+export type MutationResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createListing?: Resolver<ResolversTypes['CreateListingResponse'], ParentType, ContextType, RequireFields<MutationCreateListingArgs, 'input'>>;
+};
+
 export type QueryResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   featuredListings?: Resolver<Array<ResolversTypes['Listing']>, ParentType, ContextType>;
   listing?: Resolver<Maybe<ResolversTypes['Listing']>, ParentType, ContextType, RequireFields<QueryListingArgs, 'id'>>;
@@ -169,7 +223,9 @@ export type QueryResolvers<ContextType = DataSourceContext, ParentType extends R
 
 export type Resolvers<ContextType = DataSourceContext> = {
   Amenity?: AmenityResolvers<ContextType>;
+  CreateListingResponse?: CreateListingResponseResolvers<ContextType>;
   Listing?: ListingResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };
 
