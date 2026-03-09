@@ -2,6 +2,8 @@
 type Listing {
   id: ID!
   title: String!
+  "The listing's description"
+  description: String!
   numOfBeds: Int
   costPerNight: Float
   closedForBookings: Boolean
@@ -10,4 +12,6 @@ type Listing {
 type Query {
   "A curated array of listings to feature on the homepage"
   featuredListings: [Listing!]!
+  "Returns the details about this listing"
+  listing(id: ID!): Listing
 }

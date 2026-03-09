@@ -10,5 +10,9 @@ export const resolvers: Resolvers = {
     featuredListings: async (_, __, { dataSources }) => {
       return dataSources.listingApi.getFeaturedListings();
     },
+
+    listing: async (_, { id }, { dataSources }) => {
+      return dataSources.listingApi.getListing(id);
+    },
   },
 };

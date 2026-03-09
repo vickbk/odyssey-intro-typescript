@@ -1,6 +1,6 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
 const config: CodegenConfig = {
-  schema: "http://localhost:4000/graphql",
+  schema: "./src/app/graphql/schema.graphql",
   // documents: ["src/**/*.graphql", "src/**/*.gql"],
   generates: {
     "src/app/types/schema.ts": {
