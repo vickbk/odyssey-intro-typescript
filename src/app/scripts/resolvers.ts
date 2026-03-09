@@ -1,3 +1,4 @@
+import { validateFullAmenities } from "@/shared";
 import { Resolvers } from "../types/schema";
 
 export const resolvers: Resolvers = {
@@ -7,12 +8,20 @@ export const resolvers: Resolvers = {
     //     return dataSources.listingApi.getFeaturedListings();
     //   },
     // ),
-    featuredListings: async (_, __, { dataSources }) => {
+    featuredListings: (_, __, { dataSources }) => {
       return dataSources.listingApi.getFeaturedListings();
     },
 
-    listing: async (_, { id }, { dataSources }) => {
+    listing: (_, { id }, { dataSources }) => {
       return dataSources.listingApi.getListing(id);
+    },
+  },
+
+  Listing: {
+    amenities: ({ id, amenities }, _, { dataSources }) => {
+      return validateFullAmenities(amenities)
+        ? amenities
+        : dataSources.listingApi.getAmenities(id);
     },
   },
 };

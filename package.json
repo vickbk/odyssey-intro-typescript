@@ -15,7 +15,7 @@
   },
   "scripts": {
     "compile": "tsc",
-    "dev": "concurrently \"ts-node-dev --respawn ./src/index.ts\" \"pnpm generate\"",
+    "dev": "concurrently \"ts-node-dev -r tsconfig-paths/register ./src/index.ts\" \"pnpm generate\"",
     "start": "pnpm compile && nodemon ./dist/index.js",
     "test": "jest",
     "generate": "graphql-codegen --watch ./src/app/graphql/schema.graphql"
@@ -40,6 +40,7 @@
     "ts-jest": "^29.0.2",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.0.0"
   },
   "jest": {

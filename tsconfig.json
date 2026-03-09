@@ -25,5 +25,8 @@
   },
   "files": ["src/graphql.d.ts"],
   "include": ["src/**/*", "codegen.ts"],
-  "exclude": ["codegen.ts", "dist"]
+  "exclude": ["codegen.ts", "dist"],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
 }
