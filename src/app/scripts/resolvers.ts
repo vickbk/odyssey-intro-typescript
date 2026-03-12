@@ -1,4 +1,4 @@
-import { validateFullAmenities } from "@/shared";
+import { validateFullAmenities } from "@/features";
 import { Resolvers } from "../types/schema";
 
 export const resolvers: Resolvers = {

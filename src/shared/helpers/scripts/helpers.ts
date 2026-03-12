@@ -1,13 +1,8 @@
-import { Amenity, Resolver } from "@/app/types";
+import { Resolver } from "@/app/types";
 import { readFileSync } from "fs";
 import gql from "graphql-tag";
 import path from "path";
 import { GQLLoaderParams, NormalizePathParams } from "../types";
-
-export const validateFullAmenities = (amenityList: Amenity[]) =>
-  amenityList.some(hasOwnPropertyName);
-
-const hasOwnPropertyName = (amenity: Amenity): boolean => "name" in amenity;
 
 export function resolverWrapper<T>(resolver: Function): Resolver<T> {
   return async (
