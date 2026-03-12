@@ -2,6 +2,7 @@ import { Amenity, Resolver } from "@/app/types";
 import { readFileSync } from "fs";
 import gql from "graphql-tag";
 import path from "path";
+import { GQLLoaderParams, NormalizePathParams } from "../types";
 
 export const validateFullAmenities = (amenityList: Amenity[]) =>
   amenityList.some(hasOwnPropertyName);
@@ -30,8 +31,11 @@ const fileCache: Record<string, import("graphql").DocumentNode> = {};
  * The loader is intentionally lightweight:
  *
  *   * accepts an array of file names (relative to `folder`)
- *   * automatically prepends `../graphql/` when no path separator is present
- *   * appends `.gql` if the extension is missing
+ *   * accepts optional `graphqlFolder` and `defaultExtension` parameters so
+ *     callers can override the implicit `../graphql` directory and the
+ *     default `.gql` suffix used when none is provided.
+ *   * appends `.gql` by default, but will also preserve `.graphql` when
+ *     specified or selected by the defaultExtension argument.
  *   * returns an array of parsed `DocumentNode` objects suitable for
  *     feeding into Apollo Server, `makeExecutableSchema`, etc.
  *
@@ -39,7 +43,9 @@ const fileCache: Record<string, import("graphql").DocumentNode> = {};
  * ```ts
  * const typeDefs = gqlFileLoader({
  *   files: ["schema", "other-types.gql"],
- *   folder: path.join(__dirname, "../graphql"),
+ *   folder: __dirname,
+ *   graphqlFolder: path.join(__dirname, "../schemas"),
+ *   defaultExtension: ".graphql",
  * });
  * ```
  *
@@ -47,23 +53,29 @@ const fileCache: Record<string, import("graphql").DocumentNode> = {};
  * inputs are cheap.  It performs all path normalization up front and only
  * calls `readFileSync` once per unique absolute path.
  *
- * @param options.files  list of file names or relative paths
- * @param options.folder base directory to resolve the files from;
+ * @param options.files        list of file names or relative paths
+ * @param options.folder       base directory to resolve the files from;
+ * @param options.graphqlFolder directory to prepend when a file has no path;
+ *                             defaults to `"../graphql"` relative to
+ *                             `folder`.
+ * @param options.defaultExtension  extension to append when none exists;
+ *                             defaults to `".gql"`.
  *
  * @returns an array of parsed documents in the same order as `files`
  */
 export function gqlFileLoader({
   files,
   folder = __dirname,
-}: {
-  files: string[];
-  folder: string;
-}) {
+  // sub‑directory to use when a file name does not include a path
+  graphqlFolder = path.join("..", "graphql"),
+  // extension to append when none is present (either ".gql" or ".graphql").
+  defaultExtension = ".gql",
+}: GQLLoaderParams) {
   // resolve the base folder once so we avoid calling path.resolve per file
   const base = path.resolve(folder);
 
   return files.map((file) => {
-    const normalized = normalizeFile(file);
+    const normalized = normalizePath({ file, graphqlFolder, defaultExtension });
     const absolutePath = path.resolve(base, normalized);
 
     if (fileCache[absolutePath]) {
@@ -78,33 +90,38 @@ export function gqlFileLoader({
 }
 
 /**
- * Make sure a user-supplied filename is in a form we can resolve from disk.
+ * Normalize a filename into a path that can be resolved from disk.
  *
- * Rules:
- *  * if the name does **not** begin with `.` we assume
- *    the file lives in `../graphql` (relative to the caller) and add
- *    that prefix for them.
- *  * if the name already has an extension of `.gql` or `.graphql` we leave it
- *    alone; otherwise we append `.gql`.
- *  * final path components are normalized so Windows/Unix path separators are
- *    handled transparently.
+ * @param params.file             the name or relative path provided by the caller
+ * @param params.graphqlFolder    directory to prepend when `file` has no path
+ *                                component; relative to the loader's base folder.
+ *                                defaults to `"../graphql"` which matches our
+ *                                legacy behaviour.
+ * @param params.defaultExtension extension to add when `file` lacks one; defaults
+ *                                to `".gql"`. Existing `.gql` or `.graphql`
+ *                                suffixes are preserved.
+ * @returns a normalized path string ready for `path.resolve`
  *
  * Examples:
- *   normalizeFile("schema")          -> "../graphql/schema.gql"
- *   normalizeFile("./schema.gql")    -> "./schema.gql"
- *   normalizeFile("types/extra")     -> "../graphql/types/extra.gql"
- *
- * @param file user-provided filename or relative path
+ *   normalizePath({file: "schema"})
+ *     -> "../graphql/schema.gql"
+ *   normalizePath({file: "schema", graphFolder: "types"})
+ *     -> "types/schema.gql"
+ *   normalizePath({file: "foo.graphql", defaultExtension: ".graphql"})
+ *     -> "foo.graphql"        // existing extension wins
  */
-function normalizeFile(file: string) {
-  // if the string starts with `.` (./ or ../)
-  // we treat it as an explicit path and don’t add our default graphql directory.
-  const needsPrefix = !/^\.?\.?[\/\\]/.test(file);
-  const prefix = needsPrefix ? path.join("..", "graphql") + path.sep : "";
+function normalizePath({
+  file,
+  graphqlFolder = path.join("..", "graphql"),
+  defaultExtension = ".gql",
+}: NormalizePathParams) {
+  // explicit paths start with `.` or contain a separator. if neither is
+  // present we add the folder prefix.
+  const needsPrefix = !/^\.?\.?[\/\\]/.test(file) && !file.includes(path.sep);
+  const prefix = needsPrefix ? path.join(graphqlFolder) + path.sep : "";
 
   const hasExtension = /\.(gql|graphql)$/i.test(file);
-  const suffix = hasExtension ? "" : ".gql";
+  const suffix = hasExtension ? "" : defaultExtension;
 
-  // path.normalize will fix any mixed separators and collapse `foo/../bar`.
   return path.normalize(prefix + file + suffix);
 }
