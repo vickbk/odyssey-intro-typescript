@@ -23,7 +23,3 @@ type CreateListingResponse {
   "The newly created listing"
   listing: Listing
 }
-
-extend type Mutation {
-  createListing(input: CreateListingInput!): CreateListingResponse!
-}

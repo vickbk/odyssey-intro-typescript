@@ -67,6 +67,7 @@ export type Listing = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  _empty?: Maybe<Scalars['Boolean']['output']>;
   createListing: CreateListingResponse;
 };
 
@@ -77,6 +78,7 @@ export type MutationCreateListingArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  _empty?: Maybe<Scalars['Boolean']['output']>;
   /** A curated array of listings to feature on the homepage */
   featuredListings: Array<Listing>;
   /** Returns the details about this listing */
@@ -213,10 +215,12 @@ export type ListingResolvers<ContextType = DataSourceContext, ParentType extends
 };
 
 export type MutationResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  _empty?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   createListing?: Resolver<ResolversTypes['CreateListingResponse'], ParentType, ContextType, RequireFields<MutationCreateListingArgs, 'input'>>;
 };
 
 export type QueryResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  _empty?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   featuredListings?: Resolver<Array<ResolversTypes['Listing']>, ParentType, ContextType>;
   listing?: Resolver<Maybe<ResolversTypes['Listing']>, ParentType, ContextType, RequireFields<QueryListingArgs, 'id'>>;
 };
