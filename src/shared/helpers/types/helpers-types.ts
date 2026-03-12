@@ -31,6 +31,10 @@ export type ResolverParams<T extends AnyResolver> =
         args: A;
         contextValue: C;
         info: GraphQLResolveInfo;
+        p: P;
+        a: A;
+        c: C;
+        i: GraphQLResolveInfo;
       }
     : never;
 

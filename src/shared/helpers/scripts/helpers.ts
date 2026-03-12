@@ -42,7 +42,16 @@ export function resolverWrapper<T extends AnyResolver>(
   resolver: ResolverFunction<T>,
 ): T {
   return ((parent, args, contextValue, info) =>
-    resolver({ parent, args, contextValue, info } as ResolverParams<T>)) as T;
+    resolver({
+      parent,
+      p: parent,
+      args,
+      a: args,
+      contextValue,
+      c: contextValue,
+      info,
+      i: info,
+    } as unknown as ResolverParams<T>)) as T;
 }
 
 // simple in-memory cache keyed by absolute file path so we don't re-read the

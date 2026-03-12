@@ -9,36 +9,44 @@ export const resolvers: Resolvers = {
       async ({ contextValue: { dataSources } }) =>
         dataSources.listingApi.getFeaturedListings(),
     ),
-    listing: (_, { id }, { dataSources }) => {
-      return dataSources.listingApi.getListing(id);
-    },
+    listing: resolverWrapper(
+      ({
+        args: { id },
+        contextValue: {
+          dataSources: { listingApi },
+        },
+      }) => listingApi.getListing(id),
+    ),
   },
 
   Listing: {
-    amenities: ({ id, amenities }, _, { dataSources }) => {
-      return validateFullAmenities(amenities)
-        ? amenities
-        : dataSources.listingApi.getAmenities(id);
-    },
+    amenities: resolverWrapper(
+      ({ parent: { id, amenities }, contextValue: { dataSources } }) => {
+        return validateFullAmenities(amenities)
+          ? amenities
+          : dataSources.listingApi.getAmenities(id);
+      },
+    ),
   },
 
   Mutation: {
-    async createListing(_, { input }, { dataSources }) {
-      try {
-        return {
-          code: 200,
-          success: true,
-          message: "Listing successfully created!",
-          listing: await dataSources.listingApi.createListing(input),
-        };
-      } catch (error) {
-        return {
-          code: 500,
-          success: false,
-          message: `Something went wrong: ${error.extensions.response.body}`,
-          listing: null,
-        };
-      }
-    },
+    createListing: resolverWrapper(
+      async ({ args: { input }, contextValue: { dataSources } }) => {
+        try {
+          return {
+            code: 200,
+            success: true,
+            message: "Listing successfully created!",
+            listing: await dataSources.listingApi.createListing(input),
+          };
+        } catch (error) {
+          return {
+            code: 500,
+            success: false,
+            message: `Something went wrong: ${error.extensions.response.body}`,
+          };
+        }
+      },
+    ),
   },
 };
