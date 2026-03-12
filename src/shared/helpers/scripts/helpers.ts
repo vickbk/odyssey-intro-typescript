@@ -1,4 +1,5 @@
 import { readFileSync } from "fs";
+import { DocumentNode } from "graphql";
 import gql from "graphql-tag";
 import path from "path";
 import { GQLLoaderParams, NormalizePathParams } from "../types";
@@ -109,4 +110,10 @@ function normalizePath({
   const suffix = hasExtension ? "" : defaultExtension;
 
   return path.normalize(prefix + file + suffix);
+}
+
+export function addDefinitions(...nodes: DocumentNode[][]) {
+  const typeDefs: DocumentNode[] = [];
+  nodes.forEach((node) => typeDefs.push(...node));
+  return typeDefs;
 }
