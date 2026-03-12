@@ -1,6 +1,6 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
 const config: CodegenConfig = {
-  schema: "./src/app/graphql/schema.graphql",
+  schema: ["./src/**/*.graphql", "./src/**/*.gql"],
   // documents: ["src/**/*.graphql", "src/**/*.gql"],
   generates: {
     "src/app/types/schema.ts": {
@@ -13,7 +13,7 @@ const config: CodegenConfig = {
       plugins: ["typescript-resolvers"],
       preset: "near-operation-file",
       presetConfig: {
-        // path: "../types/",
+        path: "../types/",
         extension: ".generated.ts",
         baseTypesPath: "src/app/types/schema.ts",
       },
