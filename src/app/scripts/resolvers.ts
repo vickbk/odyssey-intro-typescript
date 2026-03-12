@@ -1,17 +1,14 @@
 import { validateFullAmenities } from "@/features";
-import { Resolvers } from "../types/schema";
+import { resolverWrapper } from "@/shared";
+import { Resolvers } from "../types";
 
 export const resolvers: Resolvers = {
   Query: {
-    // featuredListings: resolverWrapper(
-    //   async ({ contextValue: { dataSources } }) => {
-    //     return dataSources.listingApi.getFeaturedListings();
-    //   },
-    // ),
-    featuredListings: (_, __, { dataSources }) => {
-      return dataSources.listingApi.getFeaturedListings();
-    },
-
+    // example using resolverWrapper to get full typing automatically
+    featuredListings: resolverWrapper(
+      async ({ contextValue: { dataSources } }) =>
+        dataSources.listingApi.getFeaturedListings(),
+    ),
     listing: (_, { id }, { dataSources }) => {
       return dataSources.listingApi.getListing(id);
     },
