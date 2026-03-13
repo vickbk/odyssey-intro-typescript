@@ -1,6 +1,6 @@
+import { ListingApi } from "@/features";
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
-import { ListingApi } from "../datasources/listing-api";
 import { typeDefs } from "./definitions";
 import { resolvers } from "./resolvers";
 

@@ -1,5 +1,5 @@
+import type { Amenity, CreateListingInput, Listing } from "@/app/types";
 import { RESTDataSource } from "@apollo/datasource-rest";
-import { Amenity, CreateListingInput, Listing } from "../types";
 
 export class ListingApi extends RESTDataSource {
   baseURL = "https://rt-airlock-services-listing.herokuapp.com/";

@@ -1,4 +1,4 @@
-import { ListingApi } from "../datasources/listing-api";
+import { ListingApi } from "@/features";
 
 export type DataSourceContext = {
   dataSources: {
