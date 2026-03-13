@@ -1,2 +1,2 @@
 export * from "./amenity.definitions";
-export * from "./verify-full-aminity";
+export * from "./validate-amenity";
