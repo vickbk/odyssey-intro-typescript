@@ -1,3 +1,4 @@
 export * from "./listing.api";
 export * from "./listing.definitions";
-// export * from "./listing.resolvers";
+export * from "./listing.queries";
+export * from "./listing.resolvers";
