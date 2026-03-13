@@ -1,9 +1,12 @@
-import { readFileSync } from "fs";
-import gql from "graphql-tag";
-import path from "path";
+import { amenityTypesDef, listingDefinitions } from "@/features";
+import { addDefinitions, gqlFileLoader } from "@/shared";
+import { DocumentNode } from "graphql";
 
-export const typeDefs = gql(
-  readFileSync(path.resolve(__dirname, "../graphql/schema.graphql"), {
-    encoding: "utf-8",
+export const typeDefs: DocumentNode[] = addDefinitions(
+  gqlFileLoader({
+    folder: __dirname,
+    files: ["schema.graphql"],
   }),
+  listingDefinitions,
+  amenityTypesDef,
 );
